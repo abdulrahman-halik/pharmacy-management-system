@@ -1,0 +1,24 @@
+{
+  "name": "pharmacy-management-system",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run start:dev --workspace=@pharmacy/api",
+    "dev:web": "npm run dev --workspace=@pharmacy/web",
+    "build:shared": "npm run build --workspace=@pharmacy/shared",
+    "build:api": "npm run build --workspace=@pharmacy/api",
+    "build:web": "npm run build --workspace=@pharmacy/web",
+    "build": "npm run build:shared && npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "docker:up": "docker compose -f infra/docker-compose.yml up -d",
+    "docker:down": "docker compose -f infra/docker-compose.yml down",
+    "docker:logs": "docker compose -f infra/docker-compose.yml logs -f"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
