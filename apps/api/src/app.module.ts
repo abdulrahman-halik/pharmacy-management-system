@@ -5,6 +5,9 @@ import { dataSourceOptions } from './database/data-source';
 import { HealthModule } from './common/health/health.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { DoctorsModule } from './modules/doctors/doctors.module';
+import { PrescriptionsModule } from './modules/prescriptions/prescriptions.module';
 
 @Module({
   imports: [
@@ -18,6 +21,9 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     }),
     HealthModule,
     InventoryModule,
+    CustomersModule,
+    DoctorsModule,
+    PrescriptionsModule,
   ],
 })
 export class AppModule implements NestModule {

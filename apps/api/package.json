@@ -16,6 +16,8 @@
     "seed:medicines": "ts-node src/database/seeds/medicines.seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1156.0",
+    "@aws-sdk/s3-request-presigner": "^3.1156.0",
     "@nestjs/bullmq": "^10.2.3",
     "@nestjs/common": "^10.3.8",
     "@nestjs/config": "^3.2.2",
