@@ -18,6 +18,9 @@ export const dataSourceOptions: DataSourceOptions = {
   timezone: '+05:30',
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
+  extra: {
+    connectionLimit: 50,
+  },
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
 };
