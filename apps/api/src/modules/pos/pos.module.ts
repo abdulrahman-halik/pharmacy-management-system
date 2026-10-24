@@ -22,6 +22,10 @@ import { InventoryModule } from '../inventory/inventory.module';
 import { CustomersModule } from '../customers/customers.module';
 import { PrescriptionsModule } from '../prescriptions/prescriptions.module';
 
+import { DayClose } from '../finance/entities/day-close.entity';
+import { CashLedgerEntry } from '../finance/entities/cash-ledger-entry.entity';
+import { PaymentMethod } from '../finance/entities/payment-method.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -37,6 +41,9 @@ import { PrescriptionsModule } from '../prescriptions/prescriptions.module';
       Prescription,
       PrescriptionItem,
       ControlledSubstanceRegister,
+      DayClose,
+      CashLedgerEntry,
+      PaymentMethod,
     ]),
     InventoryModule,
     CustomersModule,

@@ -26,7 +26,12 @@ import {
   PaymentMethodType,
   PrescriptionStatus,
   PrescriptionItemStatus,
+  CashDirection,
+  CashSourceType,
 } from '@pharmacy/shared';
+import { DayClose } from '../../finance/entities/day-close.entity';
+import { CashLedgerEntry } from '../../finance/entities/cash-ledger-entry.entity';
+import { PaymentMethod } from '../../finance/entities/payment-method.entity';
 
 @Injectable()
 export class PosCheckoutService {
@@ -54,6 +59,17 @@ export class PosCheckoutService {
     await queryRunner.startTransaction();
 
     try {
+      // 0. Day Locking Enforcement (Reject sales on locked calendar dates)
+      const todayStr = new Date().toISOString().split('T')[0];
+      const dayClose = await queryRunner.manager.findOne(DayClose, {
+        where: { closingDate: todayStr as unknown as Date, storeId: 1 },
+      });
+      if (dayClose && dayClose.isLocked) {
+        throw new BadRequestException(
+          `Date ${todayStr} is locked by Day-Close register`,
+        );
+      }
+
       // 1. Idempotency Check
       if (dto.idempotencyKey) {
         const existing = await queryRunner.manager.findOne(Sale, {
@@ -404,6 +420,35 @@ export class PosCheckoutService {
       });
 
       const savedSale = await queryRunner.manager.save(Sale, sale);
+
+      // Record tenders in Unified Cash Ledger
+      for (const split of dto.splitPayments) {
+        if (split.amount > 0) {
+          let pmCode = 'CASH';
+          if (split.method === 'CARD') pmCode = 'VISA_MASTER';
+          else if (split.method === 'BANK_TRANSFER') pmCode = 'BANK_TRANSFER';
+          else if (split.method === 'CREDIT') pmCode = 'CUSTOMER_CREDIT';
+          else if (split.method === 'LOYALTY_POINTS') pmCode = 'LOYALTY_POINTS';
+
+          const pm = await queryRunner.manager.findOne(PaymentMethod, {
+            where: { code: pmCode },
+          });
+
+          const ledgerEntry = queryRunner.manager.create(CashLedgerEntry, {
+            storeId: 1,
+            entryDate: savedSale.createdAt,
+            direction: 'IN' as CashDirection,
+            amountLkr: split.amount,
+            paymentMethodId: pm?.id || 'pm-cash',
+            sourceType: 'SALE' as CashSourceType,
+            sourceId: savedSale.id,
+            description: `POS Sale Receipt #${savedSale.invoiceNumber} (${split.method})`,
+            userId: cashierId,
+          });
+          await queryRunner.manager.save(CashLedgerEntry, ledgerEntry);
+        }
+      }
+
       await queryRunner.commitTransaction();
 
       // 8. Trigger asynchronous background receipt generation and digital dispatch

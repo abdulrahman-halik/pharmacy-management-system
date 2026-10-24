@@ -11,6 +11,8 @@ import { SupplierPayment } from './entities/supplier-payment.entity';
 import { Medicine } from '../medicines/entities/medicine.entity';
 import { InventoryBatch } from '../inventory/entities/inventory-batch.entity';
 import { StockMovement } from '../inventory/entities/stock-movement.entity';
+import { PaymentMethod } from '../finance/entities/payment-method.entity';
+import { CashLedgerEntry } from '../finance/entities/cash-ledger-entry.entity';
 import { SupplierService } from './services/supplier.service';
 import { SupplierPaymentService } from './services/supplier-payment.service';
 import { PurchaseOrderService } from './services/purchase-order.service';
@@ -33,6 +35,8 @@ import { ProcurementController } from './controllers/procurement.controller';
       Medicine,
       InventoryBatch,
       StockMovement,
+      PaymentMethod,
+      CashLedgerEntry,
     ]),
   ],
   controllers: [ProcurementController],
