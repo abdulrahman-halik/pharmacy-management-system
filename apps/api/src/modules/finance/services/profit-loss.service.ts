@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { Sale } from '../../pos/entities/sale.entity';
 import { SaleItemAllocation } from '../../pos/entities/sale-item-allocation.entity';
 import { Expense } from '../entities/expense.entity';
+import { CashLedgerEntry } from '../entities/cash-ledger-entry.entity';
 import { ProfitAndLossSummaryDto } from '@pharmacy/shared';
 
 @Injectable()
@@ -79,9 +80,26 @@ export class ProfitLossService {
       parseFloat(expResult?.totalExpenses || '0').toFixed(2),
     );
 
-    // 4. Net Profit
+    // 4. Payroll Costs (Disbursed Salaries)
+    const payrollResult = await manager
+      .createQueryBuilder(CashLedgerEntry, 'cle')
+      .select('SUM(cle.amountLkr)', 'totalPayroll')
+      .where('cle.storeId = :storeId', { storeId })
+      .andWhere('cle.sourceType = :sourceType', { sourceType: 'SALARY' })
+      .andWhere('cle.direction = :direction', { direction: 'OUT' })
+      .andWhere('cle.entryDate BETWEEN :start AND :end', {
+        start: startDate,
+        end: endDate,
+      })
+      .getRawOne();
+
+    const payrollCostsLkr = Number(
+      parseFloat(payrollResult?.totalPayroll || '0').toFixed(2),
+    );
+
+    // 5. Net Profit (Gross Profit - Operating Expenses - Payroll Costs)
     const netProfitLkr = Number(
-      (grossProfitLkr - operatingExpensesLkr).toFixed(2),
+      (grossProfitLkr - operatingExpensesLkr - payrollCostsLkr).toFixed(2),
     );
 
     return {
@@ -97,7 +115,7 @@ export class ProfitLossService {
       grossProfitLkr,
       grossMarginPercentage,
       operatingExpensesLkr,
-      payrollCostsLkr: 0,
+      payrollCostsLkr,
       otherIncomeLkr: 0,
       netProfitLkr,
     };

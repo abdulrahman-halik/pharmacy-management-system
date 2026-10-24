@@ -35,6 +35,7 @@ import { InventoryWorkspace } from './features/inventory/InventoryWorkspace';
 import { ClinicalWorkspace } from './features/clinical/ClinicalWorkspace';
 import { PosTerminalWorkspace } from './features/pos/PosTerminalWorkspace';
 import { FinanceWorkspace } from './features/finance/FinanceWorkspace';
+import { PayrollWorkspace } from './features/payroll/PayrollWorkspace';
 
 interface HealthData {
   status: 'UP' | 'READY' | 'DEGRADED' | 'CHECKING';
@@ -47,7 +48,7 @@ interface HealthData {
 }
 
 export function App() {
-  const [activeModule, setActiveModule] = useState<'pos' | 'clinical' | 'inventory' | 'finance' | 'foundation'>('finance');
+  const [activeModule, setActiveModule] = useState<'payroll' | 'finance' | 'pos' | 'clinical' | 'inventory' | 'foundation'>('payroll');
   // Modal & Drawer interactive states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -167,6 +168,17 @@ export function App() {
           <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
+              onClick={() => setActiveModule('payroll')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'payroll'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 9: HR & Payroll
+            </button>
+            <button
+              type="button"
               onClick={() => setActiveModule('finance')}
               className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
                 activeModule === 'finance'
@@ -236,7 +248,9 @@ export function App() {
         </main>
       ) : (
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-          {activeModule === 'finance' ? (
+          {activeModule === 'payroll' ? (
+            <PayrollWorkspace />
+          ) : activeModule === 'finance' ? (
             <FinanceWorkspace />
           ) : activeModule === 'clinical' ? (
             <ClinicalWorkspace />
