@@ -11,3 +11,6 @@ export * from './medicines/types.js';
 export * from './inventory/constants.js';
 export * from './inventory/schemas.js';
 export * from './inventory/types.js';
+export * from './clinical/constants.js';
+export * from './clinical/schemas.js';
+export * from './clinical/types.js';

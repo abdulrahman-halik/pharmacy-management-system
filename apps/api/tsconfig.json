@@ -6,7 +6,8 @@
     "target": "ES2022",
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "skipLibCheck": true
   },
   "include": ["src/**/*"]
 }
