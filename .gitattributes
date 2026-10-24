@@ -1,0 +1,6 @@
+# Exclude Python files from GitHub language statistics because this project does not use Python in its product code.
+*.py linguist-detectable=false
+*.pyi linguist-detectable=false
+
+# Treat the generated/internal agent tooling as vendored, so it doesn't affect repo language composition.
+.agents/** linguist-vendored
