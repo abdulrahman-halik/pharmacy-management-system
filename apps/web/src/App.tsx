@@ -30,6 +30,7 @@ import {
   Smartphone,
   UserCheck,
 } from 'lucide-react';
+import { InventoryWorkspace } from './features/inventory/InventoryWorkspace';
 
 interface HealthData {
   status: 'UP' | 'READY' | 'DEGRADED' | 'CHECKING';
@@ -42,6 +43,7 @@ interface HealthData {
 }
 
 export function App() {
+  const [activeModule, setActiveModule] = useState<'inventory' | 'foundation'>('inventory');
   // Modal & Drawer interactive states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -145,9 +147,48 @@ export function App() {
         </div>
       </header>
 
+      {/* Module Navigation Switcher */}
+      <div className="bg-white border-b border-clinical-slate-border py-2.5 px-4 shadow-solid-sm">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveModule('inventory')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'inventory'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 4: Clinical Inventory & FEFO Ledger
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModule('foundation')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'foundation'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 1: Foundation Showcase
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="rx" size="sm">
+              FEFO Engine Active
+            </Badge>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content Showcase */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Banner: Design System Specification */}
+        {activeModule === 'inventory' ? (
+          <InventoryWorkspace />
+        ) : (
+          <>
+            {/* Banner: Design System Specification */}
         <div className="bg-white rounded-lg border border-clinical-slate-border p-6 shadow-solid flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -628,6 +669,8 @@ export function App() {
             </Card>
           </div>
         </section>
+          </>
+        )}
       </main>
 
       {/* Interactive Prescription Review Modal (Zero Transparency, ESC dismiss) */}

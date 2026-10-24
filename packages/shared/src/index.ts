@@ -8,3 +8,6 @@ export * from './utils/packaging.js';
 export * from './medicines/constants.js';
 export * from './medicines/schemas.js';
 export * from './medicines/types.js';
+export * from './inventory/constants.js';
+export * from './inventory/schemas.js';
+export * from './inventory/types.js';

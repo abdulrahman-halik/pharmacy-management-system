@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './database/data-source';
 import { HealthModule } from './common/health/health.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { InventoryModule } from './modules/inventory/inventory.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
       autoLoadEntities: true,
     }),
     HealthModule,
+    InventoryModule,
   ],
 })
 export class AppModule implements NestModule {

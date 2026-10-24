@@ -7,7 +7,7 @@
     "start": "node dist/main.js",
     "start:dev": "node --watch -r ts-node/register src/main.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node --test dist/**/*.test.js || echo 'No backend tests yet'",
+    "test": "tsc -p tsconfig.json --outDir dist-test && node --test dist-test/**/*.test.js",
     "typeorm": "typeorm-ts-node-commonjs -d src/database/data-source.ts",
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
