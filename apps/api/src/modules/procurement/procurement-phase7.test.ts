@@ -1,4 +1,4 @@
-import { test, before } from 'node:test';
+import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import AppDataSource from '../../database/data-source';
 import { Supplier } from './entities/supplier.entity';
@@ -553,3 +553,10 @@ test('Verification 7: Purchase Order Creation, Status & Fulfillment', async () =
   assert.equal(currentPo.status, 'RECEIVED');
   assert.equal(currentPo.items[0].receivedQuantity, 5);
 });
+
+after(async () => {
+  if (AppDataSource.isInitialized) {
+    await AppDataSource.destroy();
+  }
+});
+

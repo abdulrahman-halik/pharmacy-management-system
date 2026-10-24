@@ -148,7 +148,6 @@ export class GrnIntakeService {
           where: {
             medicineId: item.medicineId,
             batchNumber: item.batchNumber,
-            expiryDate: new Date(item.expiryDate),
           },
           lock: { mode: 'pessimistic_write' },
         });

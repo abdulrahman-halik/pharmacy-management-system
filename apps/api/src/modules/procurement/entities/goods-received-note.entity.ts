@@ -73,6 +73,7 @@ export class GoodsReceivedNote extends BaseAppEntity {
   paidAmountLkr!: number;
 
   @Column({
+    name: 'payment_status',
     type: 'enum',
     enum: GRN_PAYMENT_STATUSES,
     default: 'UNPAID',

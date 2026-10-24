@@ -8,7 +8,9 @@ import { Supplier } from '../entities/supplier.entity';
 import { GoodsReceivedNote } from '../entities/goods-received-note.entity';
 import { SupplierPayment } from '../entities/supplier-payment.entity';
 import { ProcurementSequenceService } from './sequence.service';
-import { RecordSupplierPaymentInput, SupplierPaymentDto } from '@pharmacy/shared';
+import { RecordSupplierPaymentInput, SupplierPaymentDto, CashDirection, CashSourceType } from '@pharmacy/shared';
+import { PaymentMethod } from '../../finance/entities/payment-method.entity';
+import { CashLedgerEntry } from '../../finance/entities/cash-ledger-entry.entity';
 
 @Injectable()
 export class SupplierPaymentService {
@@ -97,6 +99,31 @@ export class SupplierPaymentService {
       });
 
       const saved = await manager.save(SupplierPayment, payment);
+
+      // Record in Unified Cash Ledger
+      const pmCode =
+        input.paymentMethod === 'BANK_TRANSFER'
+          ? 'BANK_TRANSFER'
+          : input.paymentMethod === 'CHEQUE'
+            ? 'CHEQUE'
+            : 'CASH';
+      const pm =
+        (await manager.findOne(PaymentMethod, { where: { code: pmCode } })) ||
+        (await manager.findOne(PaymentMethod, { where: { code: 'CASH' } }));
+
+      const ledgerEntry = manager.create(CashLedgerEntry, {
+        storeId: 1,
+        entryDate: saved.paymentDate,
+        direction: 'OUT' as CashDirection,
+        amountLkr: Number(input.amountLkr),
+        paymentMethodId: pm?.id || 'pm-cash',
+        bankAccountId: input.bankAccountId || undefined,
+        sourceType: 'SUPPLIER_PAYMENT' as CashSourceType,
+        sourceId: saved.id,
+        description: `Supplier Payout #${saved.paymentNumber} to ${supplier.companyName}`,
+        userId,
+      });
+      await manager.save(CashLedgerEntry, ledgerEntry);
 
       return {
         id: saved.id,
