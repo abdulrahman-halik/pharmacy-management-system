@@ -4,6 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './database/data-source';
 import { HealthModule } from './common/health/health.module';
 import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
+import { InventoryModule } from './modules/inventory/inventory.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { DoctorsModule } from './modules/doctors/doctors.module';
+import { PrescriptionsModule } from './modules/prescriptions/prescriptions.module';
+import { PosModule } from './modules/pos/pos.module';
+import { ProcurementModule } from './modules/procurement/procurement.module';
+import { FinanceModule } from './modules/finance/finance.module';
+import { PayrollModule } from './modules/payroll/payroll.module';
 
 @Module({
   imports: [
@@ -16,6 +24,14 @@ import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
       autoLoadEntities: true,
     }),
     HealthModule,
+    InventoryModule,
+    CustomersModule,
+    DoctorsModule,
+    PrescriptionsModule,
+    PosModule,
+    ProcurementModule,
+    FinanceModule,
+    PayrollModule,
   ],
 })
 export class AppModule implements NestModule {

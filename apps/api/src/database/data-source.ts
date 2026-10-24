@@ -1,4 +1,11 @@
+import '../config/load-env';
 import { DataSource, DataSourceOptions } from 'typeorm';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction && !process.env.DB_PASSWORD) {
+  throw new Error('DB_PASSWORD must be set explicitly in production');
+}
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
@@ -11,6 +18,9 @@ export const dataSourceOptions: DataSourceOptions = {
   timezone: '+05:30',
   synchronize: false,
   logging: process.env.NODE_ENV === 'development',
+  extra: {
+    connectionLimit: 50,
+  },
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],
 };

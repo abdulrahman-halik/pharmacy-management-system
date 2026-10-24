@@ -10,10 +10,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
     "@pharmacy/shared": "*",
+    "@tanstack/react-query": "^5.104.5",
+    "@tanstack/react-table": "^8.21.3",
     "lucide-react": "^0.378.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.91.0",
+    "react-router-dom": "^6.30.6",
+    "react-zoom-pan-pinch": "^4.2.0",
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",

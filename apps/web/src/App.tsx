@@ -19,6 +19,7 @@ import {
   Activity,
   AlertTriangle,
   CheckCircle2,
+  Clock,
   Database,
   FileText,
   HardDrive,
@@ -30,6 +31,11 @@ import {
   Smartphone,
   UserCheck,
 } from 'lucide-react';
+import { InventoryWorkspace } from './features/inventory/InventoryWorkspace';
+import { ClinicalWorkspace } from './features/clinical/ClinicalWorkspace';
+import { PosTerminalWorkspace } from './features/pos/PosTerminalWorkspace';
+import { FinanceWorkspace } from './features/finance/FinanceWorkspace';
+import { PayrollWorkspace } from './features/payroll/PayrollWorkspace';
 
 interface HealthData {
   status: 'UP' | 'READY' | 'DEGRADED' | 'CHECKING';
@@ -42,6 +48,7 @@ interface HealthData {
 }
 
 export function App() {
+  const [activeModule, setActiveModule] = useState<'payroll' | 'finance' | 'pos' | 'clinical' | 'inventory' | 'foundation'>('payroll');
   // Modal & Drawer interactive states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -121,10 +128,20 @@ export function App() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveModule('clinical')}
+              className="flex items-center gap-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-md transition shadow-solid-sm"
+            >
+              <Clock className="w-3.5 h-3.5 text-clinical-amber" />
+              <span className="text-xs font-bold text-amber-900">2 Pending Rx</span>
+              <span className="w-2 h-2 rounded-full bg-clinical-amber animate-pulse"></span>
+            </button>
+
             <div className="hidden md:flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-md border border-clinical-slate-border">
               <Activity className="w-4 h-4 text-clinical-emerald" />
-              <span className="text-xs font-bold text-clinical-slate-heading">API Status:</span>
+              <span className="text-xs font-bold text-clinical-slate-heading">API:</span>
               <Badge
                 variant={healthData.status === 'READY' ? 'in-stock' : 'low-stock'}
                 size="sm"
@@ -145,9 +162,103 @@ export function App() {
         </div>
       </header>
 
+      {/* Module Navigation Switcher */}
+      <div className="bg-white border-b border-clinical-slate-border py-2.5 px-4 shadow-solid-sm">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => setActiveModule('payroll')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'payroll'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 9: HR & Payroll
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModule('finance')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'finance'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 8: Finance & Day-Close
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModule('pos')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'pos'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 6: POS Terminal & Smart Checkout
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModule('clinical')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'clinical'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 5: Clinical Prescriptions & Patient 360
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModule('inventory')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'inventory'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 4: Clinical Inventory & FEFO Ledger
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveModule('foundation')}
+              className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all duration-150 ${
+                activeModule === 'foundation'
+                  ? 'bg-clinical-emerald text-white shadow-solid-sm border border-clinical-emerald-dark'
+                  : 'text-clinical-slate-heading hover:bg-slate-100 border border-transparent'
+              }`}
+            >
+              Phase 1: Foundation Showcase
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="rx" size="sm">
+              Clinical Gatekeeper Active
+            </Badge>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content Showcase */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Banner: Design System Specification */}
+      {activeModule === 'pos' ? (
+        <main className="flex-1 w-full">
+          <PosTerminalWorkspace />
+        </main>
+      ) : (
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+          {activeModule === 'payroll' ? (
+            <PayrollWorkspace />
+          ) : activeModule === 'finance' ? (
+            <FinanceWorkspace />
+          ) : activeModule === 'clinical' ? (
+            <ClinicalWorkspace />
+          ) : activeModule === 'inventory' ? (
+            <InventoryWorkspace />
+          ) : (
+          <>
+            {/* Banner: Design System Specification */}
         <div className="bg-white rounded-lg border border-clinical-slate-border p-6 shadow-solid flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -628,7 +739,10 @@ export function App() {
             </Card>
           </div>
         </section>
+          </>
+        )}
       </main>
+      )}
 
       {/* Interactive Prescription Review Modal (Zero Transparency, ESC dismiss) */}
       <Modal

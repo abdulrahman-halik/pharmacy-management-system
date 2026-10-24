@@ -7,6 +7,7 @@ dist/
 # Build outputs
 apps/web/dist/
 apps/api/dist/
+apps/api/dist-test/
 packages/*/dist/
 
 # Local env files
@@ -35,3 +36,9 @@ pnpm-debug.log*
 infra/mysql/data/
 infra/minio/data/
 infra/redis/data/
+
+# Stray compiled output inside shared sources
+packages/shared/src/**/*.js
+packages/shared/src/**/*.js.map
+packages/shared/src/**/*.d.ts
+packages/shared/src/**/*.d.ts.map
