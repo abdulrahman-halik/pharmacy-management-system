@@ -91,6 +91,9 @@ before(async () => {
     receiptQueueService,
     saleRepo,
   );
+
+  // Ensure Commercial Bank main account has sufficient funds for isolation
+  await bankRepo.update({ id: 'ba-comb-main' }, { currentBalanceLkr: 150000.0 });
 });
 
 after(async () => {
