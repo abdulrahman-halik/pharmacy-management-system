@@ -41,6 +41,18 @@ export class User extends BaseAppEntity {
   })
   monthlySalary!: number; // In LKR - Restricted to ADMIN/MANAGER views
 
+  @Column({ name: 'epf_number', type: 'varchar', length: 32, nullable: true })
+  epfNumber?: string | null;
+
+  @Column({ name: 'bank_name', type: 'varchar', length: 100, nullable: true })
+  bankName?: string | null;
+
+  @Column({ name: 'bank_account_number', type: 'varchar', length: 50, nullable: true })
+  bankAccountNumber?: string | null;
+
+  @Column({ name: 'bank_branch', type: 'varchar', length: 100, nullable: true })
+  bankBranch?: string | null;
+
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive!: boolean;
 

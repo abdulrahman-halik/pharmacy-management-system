@@ -23,3 +23,6 @@ export * from './procurement/types.js';
 export * from './finance/constants.js';
 export * from './finance/schemas.js';
 export * from './finance/types.js';
+export * from './payroll/constants.js';
+export * from './payroll/schemas.js';
+export * from './payroll/types.js';
