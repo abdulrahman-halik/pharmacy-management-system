@@ -5,27 +5,39 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/main.js",
-    "start:dev": "node --watch --loader ts-node/esm src/main.ts",
+    "start:dev": "node --watch -r ts-node/register src/main.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node --test dist/**/*.test.js || echo 'No backend tests yet'"
+    "test": "node --test dist/**/*.test.js || echo 'No backend tests yet'",
+    "typeorm": "typeorm-ts-node-commonjs -d src/database/data-source.ts",
+    "migration:run": "npm run typeorm -- migration:run",
+    "migration:revert": "npm run typeorm -- migration:revert",
+    "migration:show": "npm run typeorm -- migration:show",
+    "migration:run:prod": "typeorm -d dist/database/data-source.js migration:run",
+    "seed:medicines": "ts-node src/database/seeds/medicines.seed.ts"
   },
   "dependencies": {
+    "@nestjs/bullmq": "^10.2.3",
     "@nestjs/common": "^10.3.8",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.3.8",
     "@nestjs/platform-express": "^10.3.8",
     "@nestjs/typeorm": "^10.0.2",
     "@pharmacy/shared": "*",
+    "bullmq": "^5.81.5",
+    "csv-parse": "^5.6.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "ioredis": "^5.4.1",
     "mysql2": "^3.9.7",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.13",
     "@types/node": "^20.12.7",
     "@types/uuid": "^9.0.8",
     "ts-node": "^10.9.2",
