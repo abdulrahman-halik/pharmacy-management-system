@@ -63,7 +63,7 @@ docker exec -i pharmacy_mysql mysqlbinlog \
 #### Step 4: Verify Database Invariant Integrity
 Run the schema and consistency verification test suite:
 ```bash
-npm run test -w backend
+npm run test -w @pharmacy/api
 ```
 
 #### Step 5: Resume Application Services
@@ -96,7 +96,7 @@ OPTIMIZE TABLE stock_movements;
 ## 4. AI Assistant Security & Guardrail Enforcement
 
 The AI assistant operates under strict sandboxing protocols:
-1. **Zero Text-to-SQL Policy:** The LLM cannot emit raw SQL strings. All queries execute through hardcoded, strongly typed TypeORM parameter bindings in `backend/src/modules/ai-assistant/tools/tool-registry.ts`.
+1. **Zero Text-to-SQL Policy:** The LLM cannot emit raw SQL strings. All queries execute through hardcoded, strongly typed TypeORM parameter bindings in `apps/api/src/modules/ai-assistant/tools/tool-registry.ts`.
 2. **RBAC Security Gate:** Every tool call verifies calling user's JWT role before execution. Cashiers are strictly denied access to finance or cost data.
 3. **Prompt Injection Hardening:** System prompts actively filter out instructions attempting to bypass constraints, inspect database schemas, or dump credentials.
 4. **Credential Encryption:** Third-party LLM API keys are encrypted at rest using AES-256-GCM.
