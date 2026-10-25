@@ -3,13 +3,18 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "apps/*",
+    "frontend",
+    "backend",
     "packages/*"
   ],
   "scripts": {
+    "dev:backend": "npm run start:dev --workspace=@pharmacy/api",
+    "dev:frontend": "npm run dev --workspace=@pharmacy/web",
     "dev:api": "npm run start:dev --workspace=@pharmacy/api",
     "dev:web": "npm run dev --workspace=@pharmacy/web",
     "build:shared": "npm run build --workspace=@pharmacy/shared",
+    "build:backend": "npm run build --workspace=@pharmacy/api",
+    "build:frontend": "npm run build --workspace=@pharmacy/web",
     "build:api": "npm run build --workspace=@pharmacy/api",
     "build:web": "npm run build --workspace=@pharmacy/web",
     "build": "npm run build:shared && npm run build --workspaces --if-present",

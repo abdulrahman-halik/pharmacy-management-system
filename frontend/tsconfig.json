@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
@@ -15,7 +15,7 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
-      "@pharmacy/shared": ["../../packages/shared/src/index.ts"]
+      "@pharmacy/shared": ["../packages/shared/src/index.ts"]
     }
   },
   "include": ["src"]
